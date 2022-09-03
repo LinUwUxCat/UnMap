@@ -14,9 +14,9 @@ if (node is CGameCtnChallenge map){
         block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //aaaa
         //CHANGES TO DO
         //in blocks
-        // Bit17 should be false
-        // Flags should be changed
-        // WaypointSpecialProperty should be null
+        block.Bit17 = false;
+        block.Flags = 4096; //i have no lcue what this is, gotta ask le bingbong
+        block.WaypointSpecialProperty = null;
         
         if (block.Coord.Y >= 1 && block.Coord.Y <= 31){
             if (TMNF.Blocks.Contains(block.Name)){
