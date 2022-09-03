@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "/2VUrPpp6svKN4XAk4XqBkGXsbvD9JZtarczSyYN5tu2yMHAQ7nPeJYFqBfKLFrPRuoqRy22zGhf72RuwfuHSQ==",
+  "success": true,
+  "projectFilePath": "/home/linuxcat/gbx-search/UnMap/UnMap.csproj",
+  "expectedPackageFiles": [
+    "/home/linuxcat/.nuget/packages/gbx.net/0.16.6/gbx.net.0.16.6.nupkg.sha512",
+    "/home/linuxcat/.nuget/packages/gbx.net.lzo/1.0.2/gbx.net.lzo.1.0.2.nupkg.sha512",
+    "/home/linuxcat/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.1/microsoft.extensions.logging.abstractions.6.0.1.nupkg.sha512",
+    "/home/linuxcat/.nuget/packages/tmessentials/2.3.1/tmessentials.2.3.1.nupkg.sha512"
+  ],
+  "logs": []
+}
