@@ -5,6 +5,7 @@ namespace blocklist{
         public static ReadOnlyCollection<string> Blocks = new List<string>{
             "StadiumGrassClip",
             "StadiumDirt",
+            "StadiumDirtHill",
             "StadiumDirtBorder",
             "StadiumWater",
             "StadiumPool",

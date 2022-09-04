@@ -11,8 +11,17 @@ if (args.Length < 1){
 } 
 
 bool isUnderground(string name){
-    return name == "StadiumPool" || name == "StadiumWater";
+    return name == "StadiumPool" || name == "StadiumWater" || name == "StadiumDirtBorder" || name == "StadiumDirt" ;
 }
+
+/*CGameCtnBlock DirtSolver(CGameCtnBlock block){
+    if (block.Name != "StadiumDirt" || block.Name != "StadiumDirtHill") return block;
+    if (block.Name == "StadiumDirt") { //base case. All others are basically StadiumDirtHill
+        block.Flags = 4096;
+        return block;
+    }
+
+}*/
 
 var didiask = false;
 var minheight = 1;
@@ -24,7 +33,8 @@ var node = GameBox.ParseNode(filename);
 if (node is CGameCtnChallenge map){
     defaultMap.MapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
     foreach(CGameCtnBlock block in map.Blocks!){
-        block.Coord = new Int3(block.Coord.X, !isUnderground(block.Name) ? block.Coord.Y - 8 : block.Coord.Y - 9, block.Coord.Z); //aaaa
+        block.Coord = new Int3(block.Coord.X, isUnderground(block.Name) ? block.Coord.Y - 9 : block.Name == "StadiumDirtHill" ? block.Coord.Y - 7 : block.Coord.Y - 8 , block.Coord.Z); //aaaa
+        
         //CHANGES TO DO
         //in blocks
         block.Bit17 = false;
