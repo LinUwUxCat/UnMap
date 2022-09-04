@@ -2,7 +2,7 @@
 using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System;
-using blocklist;
+using Blocklist;
 using Sharprompt;
 
 if (args.Length < 1){
@@ -46,6 +46,7 @@ if (node is CGameCtnChallenge map){
                 //FIX FLAGS
                 block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
                 defaultMap.Blocks.Add(block);
+                defaultMap.Decoration = map.Decoration;
             }
         }
         

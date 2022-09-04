@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-namespace blocklist{
+namespace Blocklist{
     class TMNF{
         public static ReadOnlyCollection<string> Blocks = new List<string>{
             "StadiumGrassClip",
