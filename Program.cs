@@ -23,8 +23,7 @@ var didiask = false;
 var minheight = 1;
 var filename = args[0];
 var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultMap.Challenge.Gbx");
-defaultMap.Blocks!.RemoveAt(0);
-defaultMap.Blocks.RemoveAt(0);
+defaultMap.Blocks!.Clear();
 var node = GameBox.ParseNode(filename);
 if (node is CGameCtnChallenge map){
     defaultMap.MapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
