@@ -26,7 +26,7 @@ if (node is CGameCtnChallenge map){
         block.Bit17 = false;
         //block.Flags = 4096; //i have no lcue what this is, gotta ask le bingbong
         block.WaypointSpecialProperty = null;
-        if (block.Coord.Y == 0 && !didiask){
+        if (block.Coord.Y == 0 && !didiask && TMNF.Blocks.Contains(block.Name)){
             didiask = true;
             if (Prompt.Confirm("Blocks at height 0 (right under the grass) have been detected. These Blocks will crash the game, except if TMUnlimiter is loaded. Do you wish to make the map TMUnlimiter-only?", false)){
                 minheight = 0;
