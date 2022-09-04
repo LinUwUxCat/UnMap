@@ -10,6 +10,7 @@ if (args.Length < 1){
     return 0;
 } 
 
+
 var didiask = false;
 var minheight = 1;
 var filename = args[0];
@@ -20,7 +21,7 @@ var node = GameBox.ParseNode(filename);
 if (node is CGameCtnChallenge map){
     defaultMap.MapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
     foreach(CGameCtnBlock block in map.Blocks!){
-        block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //aaaa
+        block.Coord = new Int3(block.Coord.X,block.Coord.Y - 8, block.Coord.Z); //aaaa
         //CHANGES TO DO
         //in blocks
         block.Bit17 = false;
@@ -34,7 +35,13 @@ if (node is CGameCtnChallenge map){
         }
         if (block.Coord.Y >= minheight && block.Coord.Y <= 31){
             if (TMNF.Blocks.Contains(block.Name)){
-                defaultMap.Blocks.Add(new CGameCtnBlock(block.Name, block.Direction, block.Coord, block.Flags));
+                //Console.WriteLine(block.Flags + " " + block.Name + " " + block.IsGhost + " " + block.IsGround + " " + block.Variant);
+                //FIX FLAGS
+                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                
+                defaultMap.Blocks.Add(block);
+                //defaultMap.Blocks.Add(new CGameCtnBlock(block.Name, block.Direction, block.Coord, fix_flags(block.Name, block.Flags)));
+                
             }
         }
         
