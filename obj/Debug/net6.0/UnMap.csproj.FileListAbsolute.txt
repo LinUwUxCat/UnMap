@@ -18,3 +18,5 @@
 /home/linuxcat/gbx-search/UnMap/obj/Debug/net6.0/UnMap.pdb
 /home/linuxcat/gbx-search/UnMap/obj/Debug/net6.0/UnMap.genruntimeconfig.cache
 /home/linuxcat/gbx-search/UnMap/obj/Debug/net6.0/ref/UnMap.dll
+/home/linuxcat/gbx-search/UnMap/bin/Debug/net6.0/Sharprompt.dll
+/home/linuxcat/gbx-search/UnMap/bin/Debug/net6.0/ja/Sharprompt.resources.dll
