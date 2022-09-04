@@ -1,0 +1,2 @@
+/home/linuxcat/gbx-search/UnMap/publish/UnMap.pdb
+/home/linuxcat/gbx-search/UnMap/publish/UnMap.exe

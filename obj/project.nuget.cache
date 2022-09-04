@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "oMi+crqMXRCXMpMFyMtDPEJm63uo5gQ6jTi/jTgVdP63H0dhOA1Tn7TbOlRL97G7RlWffo7P1Wpx8jP0jXiZ0g==",
+  "dgSpecHash": "lrUFL0sxWA/pLTLeROyL6jDHO/xvw7X2Uy243YYZ1YT6cpckw3jRvp09wzmmOLouLI5Mr06ScLniSsM/5v2y9w==",
   "success": true,
   "projectFilePath": "/home/linuxcat/gbx-search/UnMap/UnMap.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,9 @@
     "/home/linuxcat/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.1/microsoft.extensions.logging.abstractions.6.0.1.nupkg.sha512",
     "/home/linuxcat/.nuget/packages/sharprompt/2.4.4/sharprompt.2.4.4.nupkg.sha512",
     "/home/linuxcat/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
-    "/home/linuxcat/.nuget/packages/tmessentials/2.3.1/tmessentials.2.3.1.nupkg.sha512"
+    "/home/linuxcat/.nuget/packages/tmessentials/2.3.1/tmessentials.2.3.1.nupkg.sha512",
+    "/home/linuxcat/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/6.0.8/microsoft.netcore.app.runtime.linux-x64.6.0.8.nupkg.sha512",
+    "/home/linuxcat/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/6.0.8/microsoft.aspnetcore.app.runtime.linux-x64.6.0.8.nupkg.sha512"
   ],
   "logs": []
 }
