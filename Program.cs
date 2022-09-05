@@ -48,8 +48,13 @@ if (node is CGameCtnChallenge map){
             if (TMNF.Blocks.Contains(block.Name)){
                 //FIX FLAGS
                 block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                //Copy blocks over
                 defaultMap.Blocks.Add(block);
-                defaultMap.Decoration = map.Decoration;
+                //copy other stuff
+                defaultMap.Decoration = map.Decoration; //mood
+                defaultMap.Thumbnail = map.Thumbnail; //thumbnail
+                defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
+                // do not copy the medal/author times. As physics change, this becomes irrelevant. just validate again lol
             }
         }
         
