@@ -27,13 +27,15 @@ if (node is CGameCtnChallenge map){
         Console.WriteLine("This is not a TM2 map!");
         return 0;
     }
+    CGameCtnChallenge defaultMap;
     var game = Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
     var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
     //TMNF/UF
     if (game != "TrackMania Nations ESWC"){
         var didiask = false;
         var minheight = 1;
-        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
+        defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
+        defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
             //Special block rules
@@ -60,17 +62,35 @@ if (node is CGameCtnChallenge map){
                     //Copy blocks over
                     defaultMap.Blocks.Add(block);
                     //copy other stuff
-                    defaultMap.Decoration = map.Decoration; //mood
-                    defaultMap.Thumbnail = map.Thumbnail; //thumbnail
-                    defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
-                    // do not copy the medal/author times. As physics change, this becomes irrelevant. just validate again lol
+                    
                 }
             }
         }
+        defaultMap.Decoration = map.Decoration; //mood
+        defaultMap.Thumbnail = map.Thumbnail; //thumbnail
+        defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
+        defaultMap.Save(mapName + ".Challenge.Gbx");
+        // do not copy the medal/author times. As physics change, this becomes irrelevant. just validate again lol
     //TMNESWC
     } else {
-        //TODO
+        defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx");
+        defaultMap.MapName = mapName;
+        defaultMap.Blocks!.Clear();
+        foreach(CGameCtnBlock block in map.Blocks!){
+            block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //tmneswc has no terrain so SURELY i will not have any problem with that
+            block.Bit17 = false;                    //Remove TM2-only things
+            block.WaypointSpecialProperty = null;   //
+
+            if (31 >= block.Coord.Y && block.Coord.Y >= 1){
+                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                defaultMap.Blocks.Add(block);
+            }
+        }
+        defaultMap.Thumbnail = map.Thumbnail; //thumbnail
+        defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
+        defaultMap.Save(mapName + ".Challenge.Gbx", IDRemap.TrackMania2006);
     }
+    
 }
 
 return 0;
