@@ -32,13 +32,15 @@ string getVersion(CGameCtnChallenge map){
 
 var node = GameBox.ParseNode(args[0]);
 if (node is CGameCtnChallenge map){
-    if (map.TitleID  == null){
-        Console.WriteLine("This is not a TM2 map!");
+    var version = getVersion(map);
+    if (version != "TM2" && version != "TMForever"){
+        Console.WriteLine("This is not a TM2 or TMForever map!" + version);
         return 0;
     }
     CGameCtnChallenge defaultMap;
-    var game = Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
+    var game = version == "TM2" ? Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
     var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
+    Console.WriteLine("Exporting " + mapName + " for " + game + "...");
     //TMNF/UF
     if (game != "TrackMania Nations ESWC"){
         var didiask = false;
@@ -86,9 +88,11 @@ if (node is CGameCtnChallenge map){
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
-            block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //tmneswc has no terrain so SURELY i will not have any problem with that
-            block.Bit17 = false;                    //Remove TM2-only things
-            block.WaypointSpecialProperty = null;   //
+            if (version == "TM2"){
+                block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //tmneswc has no terrain so SURELY i will not have any problem with that
+                block.Bit17 = false;                    //Remove TM2-only things
+                block.WaypointSpecialProperty = null;   //
+            }
 
             if (31 >= block.Coord.Y && block.Coord.Y >= 1 && TMNESWC.Blocks.Contains(block.Name)){
                 block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
@@ -99,7 +103,7 @@ if (node is CGameCtnChallenge map){
         defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
         defaultMap.Save(mapName + ".Challenge.Gbx", IDRemap.TrackMania2006);
     }
-    
+    Console.WriteLine("Done. Saved as " + mapName + ".Challenge.Gbx");
 }
 
 return 0;
