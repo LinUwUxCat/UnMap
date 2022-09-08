@@ -21,6 +21,15 @@ int blockHeight(string name){
     if (name == "StadiumPool" || name == "StadiumWater" || name == "StadiumDirtBorder" || name == "StadiumDirt") return 9; else if (name == "StadiuDirtHill") return 7; else return 8;
 }
 
+string getVersion(CGameCtnChallenge map){
+    
+    if (map.Chunks.TryGet(0x05F, out _)) return "TM2020";
+    if (map.TitleID != null && (map.TitleID == "TMCE@nadeolabs" || map.TitleID == "TMTurbo@nadeolabs")) return "TMTurbo";
+    if (map.TitleID != null) return "TM2";
+    if (map.Thumbnail != null) return "TMForever";
+    return "TM1";
+}
+
 var node = GameBox.ParseNode(args[0]);
 if (node is CGameCtnChallenge map){
     if (map.TitleID  == null){
@@ -81,7 +90,7 @@ if (node is CGameCtnChallenge map){
             block.Bit17 = false;                    //Remove TM2-only things
             block.WaypointSpecialProperty = null;   //
 
-            if (31 >= block.Coord.Y && block.Coord.Y >= 1){
+            if (31 >= block.Coord.Y && block.Coord.Y >= 1 && TMNESWC.Blocks.Contains(block.Name)){
                 block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
                 defaultMap.Blocks.Add(block);
             }
