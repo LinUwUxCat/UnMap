@@ -343,7 +343,7 @@ namespace Blocklist{
             "StadiumRoadMainCheckpointRight",
             "StadiumRoadMainCheckpoint",
             "StadiumRoadMainCheckpointUp",
-            "StadiumRoadMainFinish",
+            "StadiumRoadMainFinishLine", //Filename is StadiumRoadMainFinish
             "StadiumRoadMainGTCurve2",
             "StadiumRoadMainGTCurve3",
             "StadiumRoadMainGTCurve4",
@@ -356,13 +356,13 @@ namespace Blocklist{
             "StadiumRoadMainGTDiag3x2SlopeMirror",
             "StadiumRoadMainGTDiag3x2Slope",
             "StadiumRoadMainGTDiag3x2",
-            "StadiumRoadMainMultiLap",
+            "StadiumRoadMainStartFinishLine", //filename is StadiumRoadMainMultilap
             "StadiumRoadMainSlopeBase2",
             "StadiumRoadMainSlopeBase",
             "StadiumRoadMainSlopeStraight",
             "StadiumRoadMainSlopeUBottom",
             "StadiumRoadMainSlopeUTop",
-            "StadiumRoadMainStart",
+            "StadiumRoadMainStartLine", //filename is StadiumRoadMainStart
             "StadiumRoadMainTurboDown",
             "StadiumRoadMainTurboLeft",
             "StadiumRoadMainTurboRight",
