@@ -18,7 +18,7 @@ int blockHeight(string name){
     //all blocks from TM2 are raised by 8 because some space got added under the stadium.
     //However, terrain blocks' origin has changed and as such those must get lowered by 9 instead
     //except for StadiumDirtHill whose origin has changed the other way and has to get lowered by 7.
-    if (name == "StadiumPool" || name == "StadiumWater" || name == "StadiumDirtBorder" || name == "StadiumDirt") return 9; else if (name == "StadiuDirtHill") return 7; else return 8;
+    if (name == "StadiumPool" || name == "StadiumWater" || name == "StadiumDirtBorder" || name == "StadiumDirt") return 9; else if (name == "StadiumDirtHill") return 7; else return 8;
 }
 
 string getVersion(CGameCtnChallenge map){
