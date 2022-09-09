@@ -30,22 +30,10 @@ string getVersion(CGameCtnChallenge map){
     return "TM1";
 }
 
-var node = GameBox.ParseNode(args[0]);
-if (node is CGameCtnChallenge map){
-    var version = getVersion(map);
-    if (version != "TM2" && version != "TMForever"){
-        Console.WriteLine("This is not a TM2 or TMForever map!" + version);
-        return 0;
-    }
-    CGameCtnChallenge defaultMap;
-    var game = version == "TM2" ? Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
-    var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
-    Console.WriteLine("Exporting " + mapName + " for " + game + "...");
-    //TMNF/UF
-    if (game != "TrackMania Nations ESWC"){
+void unMapTMForever(CGameCtnChallenge map, string mapName){
         var didiask = false;
         var minheight = 1;
-        defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
+        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -82,9 +70,10 @@ if (node is CGameCtnChallenge map){
         defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
         defaultMap.Save(mapName + ".Challenge.Gbx");
         // do not copy the medal/author times. As physics change, this becomes irrelevant. just validate again lol
-    //TMNESWC
-    } else {
-        defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx");
+}
+
+void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version){
+    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx");
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -102,8 +91,54 @@ if (node is CGameCtnChallenge map){
         defaultMap.Thumbnail = map.Thumbnail; //thumbnail
         defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
         defaultMap.Save(mapName + ".Challenge.Gbx", IDRemap.TrackMania2006);
+}
+
+if (Directory.Exists(args[0])){
+    Console.WriteLine("Batch computing enabled. All files in the provided folder will be processed.");
+    var game = Prompt.Select("What game will the converted maps be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
+    DirectoryInfo sDir = new DirectoryInfo(args[0]);
+    foreach (FileInfo file in sDir.GetFiles()){
+        var node = GameBox.ParseNode(args[0]);
+        if (node is CGameCtnChallenge map){
+            if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
+                Console.WriteLine("File {0} is from the same game than the destination - skipping file.", file.Name);
+            } else {
+                Console.WriteLine("Exporting " + map.MapName + " to " + game + "...");
+                if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName);
+                else unMapTMNESWC(map, map.MapName, getVersion(map));
+            }
+        } else {
+            Console.WriteLine("File "+file.Name+" is not a challenge! Skipping.");
+        }
     }
-    Console.WriteLine("Done. Saved as " + mapName + ".Challenge.Gbx");
+
+} else if (File.Exists(args[0])){
+    var node = GameBox.ParseNode(args[0]);
+    if (node is CGameCtnChallenge map){
+        var version = getVersion(map);
+        if (version != "TM2" && version != "TMForever"){
+            Console.WriteLine("This is not a TM2 or TMForever map!" + version);
+            return 0;
+        }
+
+        var game = version == "TM2" ? Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
+        var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
+        Console.WriteLine("Exporting " + mapName + " to " + game + "...");
+        //TMNF/UF
+        if (game != "TrackMania Nations ESWC"){
+            unMapTMForever(map, mapName);
+        //TMNESWC
+        } else {
+            unMapTMNESWC(map, mapName, version);
+        }
+        Console.WriteLine("Done. Saved as " + mapName + ".Challenge.Gbx");
+    } else {
+        Console.WriteLine("File is not a challenge!");
+        return 0;
+    }
+} else {
+    Console.WriteLine("File does not exist!");
+    return 0;
 }
 
 return 0;
