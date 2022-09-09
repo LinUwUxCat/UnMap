@@ -213,6 +213,7 @@ namespace Blocklist{
             "StadiumRoadDirtHigh",
             "StadiumRoadDirtHighCheckpoint",
             "StadiumRoadDirtHighGTCurve3",
+            "StadiumRoadDirtHighToRoad",
             "BStadiumRoadDirtToRoadDirtHigh",
             "StadiumRoadDirtToRoadDirtHigh2",
             "StadiumRoadDirtToRoadDirtHighBridge",
@@ -295,7 +296,12 @@ namespace Blocklist{
             "StadiumInflatableCastleBig",
             "StadiumInflatableCactus",
             "StadiumInflatableSnowTree",
-            "StadiumInflatablePalmTree"
+            "StadiumInflatablePalmTree",
+            //Specials idk they were at the bottom
+            "StadiumGrass",
+            "StadiumDirtClip",
+            "StadiumWaterClip"
+
         }.AsReadOnly();
     }
 
