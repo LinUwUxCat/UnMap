@@ -30,7 +30,7 @@ string getVersion(CGameCtnChallenge map){
     return "TM1";
 }
 
-void unMapTMForever(CGameCtnChallenge map, string mapName){
+void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
         var didiask = false;
         var minheight = 1;
         var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
@@ -68,11 +68,11 @@ void unMapTMForever(CGameCtnChallenge map, string mapName){
         defaultMap.Decoration = map.Decoration; //mood
         defaultMap.Thumbnail = map.Thumbnail; //thumbnail
         defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
-        defaultMap.Save(mapName + ".Challenge.Gbx");
+        defaultMap.Save(path + mapName + ".Challenge.Gbx");
         // do not copy the medal/author times. As physics change, this becomes irrelevant. just validate again lol
 }
 
-void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version){
+void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string path = ""){
     var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx");
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
@@ -90,22 +90,26 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version){
         }
         defaultMap.Thumbnail = map.Thumbnail; //thumbnail
         defaultMap.TMObjective_NbLaps = map.TMObjective_NbLaps; //number of laps
-        defaultMap.Save(mapName + ".Challenge.Gbx", IDRemap.TrackMania2006);
+        defaultMap.Save(path + mapName + ".Challenge.Gbx", IDRemap.TrackMania2006);
 }
 
 if (Directory.Exists(args[0])){
+    //BATCH
     Console.WriteLine("Batch computing enabled. All files in the provided folder will be processed.");
     var game = Prompt.Select("What game will the converted maps be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
     DirectoryInfo sDir = new DirectoryInfo(args[0]);
+    Directory.CreateDirectory(sDir.Name + "-exported");
+    var eDir = sDir.FullName.TrimEnd('/') + "-exported/";
+    Console.WriteLine("Maps will be saved in " +eDir);
     foreach (FileInfo file in sDir.GetFiles()){
-        var node = GameBox.ParseNode(args[0]);
+        var node = GameBox.ParseNode(args[0] + file.Name);
         if (node is CGameCtnChallenge map){
             if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
                 Console.WriteLine("File {0} is from the same game than the destination - skipping file.", file.Name);
             } else {
-                Console.WriteLine("Exporting " + map.MapName + " to " + game + "...");
-                if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName);
-                else unMapTMNESWC(map, map.MapName, getVersion(map));
+                Console.WriteLine("Exporting " + file.Name + " to " + game + "...");
+                if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName, eDir);
+                else unMapTMNESWC(map, map.MapName, getVersion(map), sDir.FullName + eDir);
             }
         } else {
             Console.WriteLine("File "+file.Name+" is not a challenge! Skipping.");
