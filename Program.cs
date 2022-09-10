@@ -4,7 +4,7 @@ using GBX.NET.LZO;
 using System;
 using Blocklist;
 using Sharprompt;
-
+using Microsoft.Extensions.Logging;
 
 GBX.NET.Lzo.SetLzo(typeof(GBX.NET.LZO.MiniLZO));
 
@@ -12,6 +12,17 @@ if (args.Length < 1){
     Console.WriteLine("Please drag your TM2 map file on this executable.");
     return 0;
 } 
+
+//shamelessly stolen from https://github.com/BigBang1112/gbx-net/blob/master/Samples/SolidExtract/Program.cs
+var logger = LoggerFactory.Create( builder => {
+    builder.AddSimpleConsole(options => {
+        options.IncludeScopes = true;
+        options.SingleLine = true;
+        options.TimestampFormat = "HH:mm:ss ";
+    });
+    builder.SetMinimumLevel(args.Contains("-v") ? LogLevel.Debug : (args.Contains("-vv") ? LogLevel.Trace : LogLevel.Information));
+}).CreateLogger<Program>();
+
 
 int blockHeight(string name){
     //Special rules:
@@ -33,7 +44,7 @@ string getVersion(CGameCtnChallenge map){
 void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
         var didiask = false;
         var minheight = 1;
-        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx");
+        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx", logger: logger);
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -73,7 +84,7 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 }
 
 void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string path = ""){
-    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx");
+    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx", logger:logger);
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -95,49 +106,51 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
 
 if (Directory.Exists(args[0])){
     //BATCH
-    Console.WriteLine("Batch computing enabled. All files in the provided folder will be processed.");
+    logger.LogInformation("Batch computing enabled. All files in the provided folder will be processed.");
     var game = Prompt.Select("What game will the converted maps be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
     DirectoryInfo sDir = new DirectoryInfo(args[0]);
     Directory.CreateDirectory(sDir.Name + "-exported");
     var eDir = sDir.FullName.TrimEnd('/') + "-exported/";
-    Console.WriteLine("Maps will be saved in " +eDir);
+    logger.LogInformation("Maps will be saved in " +eDir);
     foreach (FileInfo file in sDir.GetFiles()){
         try{
-            var node = GameBox.ParseNode(args[0] + file.Name);
+            var node = GameBox.ParseNode(args[0] + file.Name, logger:logger);
             if (node is CGameCtnChallenge map){
                 if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
-                    Console.WriteLine("File {0} is from the same game than the destination - skipping file.", file.Name);
+                    logger.LogWarning("File {0} is from the same game than the destination - skipping file.", file.Name);
                 } else {
-                    Console.WriteLine("Exporting " + file.Name + " to " + game + "...");
+                    logger.LogInformation("Exporting " + file.Name + " to " + game + "...");
                     if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName, eDir);
                     else unMapTMNESWC(map, map.MapName, getVersion(map), eDir);
                 }
             } else {
-                Console.WriteLine("File "+file.Name+" is not a challenge! Skipping.");
+                logger.LogWarning("File "+file.Name+" is not a challenge! Skipping.");
             }
         } catch (Exception e){
-            Console.WriteLine("Error : " + e.Message + "\nSkipping file " + file.Name);
+            logger.LogError("Error : " + e.Message + " Skipping file " + file.Name);
         }
     }
 
 } else if (File.Exists(args[0])){
     Node? node;
     try{
-        node = GameBox.ParseNode(args[0]);
+        node = GameBox.ParseNode(args[0], logger:logger);
     } catch (Exception e){
-        Console.WriteLine("Error : " + e.Message);
+        logger.LogError("Error : " + e.Message + " Press any key to continue...");
+        Console.ReadKey();
         return 0;
     }
     if (node is CGameCtnChallenge map){
         var version = getVersion(map);
         if (version != "TM2" && version != "TMForever"){
-            Console.WriteLine("This is not a TM2 or TMForever map!" + version);
+            logger.LogError("This is not a TM2 or TMForever map! Press any key to continue...");
+            Console.ReadKey();
             return 0;
         }
 
         var game = version == "TM2" ? Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
         var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
-        Console.WriteLine("Exporting " + mapName + " to " + game + "...");
+        logger.LogInformation("Exporting " + mapName + " to " + game + "...");
         //TMNF/UF
         if (game != "TrackMania Nations ESWC"){
             unMapTMForever(map, mapName);
@@ -145,14 +158,17 @@ if (Directory.Exists(args[0])){
         } else {
             unMapTMNESWC(map, mapName, version);
         }
-        Console.WriteLine("Done. Saved as " + mapName + ".Challenge.Gbx");
+        logger.LogInformation("Done. Saved as " + mapName + ".Challenge.Gbx");
     } else {
-        Console.WriteLine("File is not a challenge!");
+        logger.LogError("File is not a challenge! Press any key to continue...");
+        Console.ReadKey();
         return 0;
     }
 } else {
-    Console.WriteLine("File does not exist!");
+    logger.LogError("File does not exist! Press any key to continue...");
+    Console.ReadKey();
     return 0;
 }
+
 
 return 0;
