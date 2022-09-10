@@ -20,7 +20,7 @@ var logger = LoggerFactory.Create( builder => {
         options.SingleLine = true;
         options.TimestampFormat = "HH:mm:ss ";
     });
-    builder.SetMinimumLevel(args.Contains("-v") ? LogLevel.Debug : (args.Contains("-vv") ? LogLevel.Trace : LogLevel.Information));
+    builder.SetMinimumLevel(args.Contains("-v") ? LogLevel.Debug : LogLevel.Information);
 }).CreateLogger<Program>();
 
 
