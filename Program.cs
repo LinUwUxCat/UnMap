@@ -114,7 +114,7 @@ if (Directory.Exists(args[0])){
     logger.LogInformation("Maps will be saved in " +eDir);
     foreach (FileInfo file in sDir.GetFiles()){
         try{
-            var node = GameBox.ParseNode(args[0] + file.Name, logger:logger);
+            var node = GameBox.ParseNode(args[0].TrimEnd('/') + "/" + file.Name, logger:logger);
             if (node is CGameCtnChallenge map){
                 if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
                     logger.LogWarning("File {0} is from the same game than the destination - skipping file.", file.Name);
@@ -127,7 +127,7 @@ if (Directory.Exists(args[0])){
                 logger.LogWarning("File "+file.Name+" is not a challenge! Skipping.");
             }
         } catch (Exception e){
-            logger.LogError("Error : " + e.Message + " Skipping file " + file.Name);
+            logger.LogWarning("Error : " + e.Message + " Skipping file " + file.Name);
         }
     }
 
