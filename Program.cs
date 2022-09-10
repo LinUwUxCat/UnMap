@@ -102,22 +102,32 @@ if (Directory.Exists(args[0])){
     var eDir = sDir.FullName.TrimEnd('/') + "-exported/";
     Console.WriteLine("Maps will be saved in " +eDir);
     foreach (FileInfo file in sDir.GetFiles()){
-        var node = GameBox.ParseNode(args[0] + file.Name);
-        if (node is CGameCtnChallenge map){
-            if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
-                Console.WriteLine("File {0} is from the same game than the destination - skipping file.", file.Name);
+        try{
+            var node = GameBox.ParseNode(args[0] + file.Name);
+            if (node is CGameCtnChallenge map){
+                if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
+                    Console.WriteLine("File {0} is from the same game than the destination - skipping file.", file.Name);
+                } else {
+                    Console.WriteLine("Exporting " + file.Name + " to " + game + "...");
+                    if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName, eDir);
+                    else unMapTMNESWC(map, map.MapName, getVersion(map), eDir);
+                }
             } else {
-                Console.WriteLine("Exporting " + file.Name + " to " + game + "...");
-                if (game == "TrackMania Nations/United Forever") unMapTMForever(map, map.MapName, eDir);
-                else unMapTMNESWC(map, map.MapName, getVersion(map), sDir.FullName + eDir);
+                Console.WriteLine("File "+file.Name+" is not a challenge! Skipping.");
             }
-        } else {
-            Console.WriteLine("File "+file.Name+" is not a challenge! Skipping.");
+        } catch (Exception e){
+            Console.WriteLine("Error : " + e.Message + "\nSkipping file " + file.Name);
         }
     }
 
 } else if (File.Exists(args[0])){
-    var node = GameBox.ParseNode(args[0]);
+    Node? node;
+    try{
+        node = GameBox.ParseNode(args[0]);
+    } catch (Exception e){
+        Console.WriteLine("Error : " + e.Message);
+        return 0;
+    }
     if (node is CGameCtnChallenge map){
         var version = getVersion(map);
         if (version != "TM2" && version != "TMForever"){
