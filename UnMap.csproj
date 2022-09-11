@@ -10,6 +10,8 @@
   <ItemGroup>
     <PackageReference Include="GBX.NET" Version="0.16.6" />
     <PackageReference Include="GBX.NET.LZO" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="Sharprompt" Version="2.4.4" />
   </ItemGroup>
 
