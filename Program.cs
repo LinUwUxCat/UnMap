@@ -110,11 +110,11 @@ if (Directory.Exists(args[0])){
     var game = Prompt.Select("What game will the converted maps be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
     DirectoryInfo sDir = new DirectoryInfo(args[0]);
     Directory.CreateDirectory(sDir.Name + "-exported");
-    var eDir = sDir.FullName.TrimEnd('/') + "-exported/";
+    var eDir = sDir.FullName.TrimEnd('/', '\\') + "-exported/";
     logger.LogInformation("Maps will be saved in " +eDir);
     foreach (FileInfo file in sDir.GetFiles()){
         try{
-            var node = GameBox.ParseNode(args[0].TrimEnd('/') + "/" + file.Name, logger:logger);
+            var node = GameBox.ParseNode(Path.Combine(sDir.FullName,file.Name) , logger:(args.Contains("-v")? logger:null));
             if (node is CGameCtnChallenge map){
                 if (game == "TrackMania Nations/United Forever" && getVersion(map) == "TMForever"){
                     logger.LogWarning("File {0} is from the same game than the destination - skipping file.", file.Name);
@@ -134,7 +134,7 @@ if (Directory.Exists(args[0])){
 } else if (File.Exists(args[0])){
     Node? node;
     try{
-        node = GameBox.ParseNode(args[0], logger:logger);
+        node = GameBox.ParseNode(args[0], logger:(args.Contains("-v")? logger:null));
     } catch (Exception e){
         logger.LogError("Error : " + e.Message + " Press any key to continue...");
         Console.ReadKey();
