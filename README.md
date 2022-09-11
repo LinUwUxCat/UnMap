@@ -8,9 +8,12 @@ It then changes some flags to remove unnecessary stuff, then exports the map.
 
 ## How to use
 #### Single Map
-Download the latest release or build it yourself, then drag your map on UnMap.exe and answer the question(s) asked.
+Download [the latest release](https://github.com/LinUwUxCat/UnMap/releases) or build it yourself, then drag your map on UnMap.exe and answer the question(s) asked.
 #### Multiple maps
 Same as above, except you need to drag a folder on UnMap.exe instead of a single map file.
+
+### Need help?
+You can find me in the [GameBox Sandbox Discord Server](https://discord.gg/9wAAJvKYyE) or in my DMs at LinuxCat#1504
 
 ### Known issues
 - Inflatables colors and signs are not carried over
