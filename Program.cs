@@ -107,7 +107,7 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
 if (Directory.Exists(args[0])){
     //BATCH
     logger.LogInformation("Batch computing enabled. All files in the provided folder will be processed.");
-    var game = Prompt.Select("What game will the converted maps be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"});
+    var game = Prompt.Select("What game will the converted maps be for? Use arrow keys to select.", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}, defaultValue:"TrackMania Nations/United Forever");
     DirectoryInfo sDir = new DirectoryInfo(args[0]);
     Directory.CreateDirectory(sDir.Name + "-exported");
     var eDir = sDir.FullName.TrimEnd('/', '\\') + "-exported/";
@@ -148,7 +148,7 @@ if (Directory.Exists(args[0])){
             return 0;
         }
 
-        var game = version == "TM2" ? Prompt.Select("What game will this map be for?", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
+        var game = version == "TM2" ? Prompt.Select("What game will this map be for? Use arrow keys to select.", new[] {"TrackMania Nations/United Forever", "TrackMania Nations ESWC"}) : "TrackMania Nations ESWC";
         var mapName = Prompt.Input<string>("What do you want your map to be named?", validators: new[] {Validators.Required()});
         logger.LogInformation("Exporting " + mapName + " to " + game + "...");
         //TMNF/UF
