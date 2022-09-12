@@ -44,7 +44,7 @@ string getVersion(CGameCtnChallenge map){
 void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
         var didiask = false;
         var minheight = 1;
-        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx", logger: logger);
+        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx", logger:(args.Contains("-v")? logger:null));
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -67,7 +67,9 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
             if ((block.Coord.Y >= minheight && block.Coord.Y <= 31) || blockHeight(block.Name) == 9){
                 if (TMNF.Blocks.Contains(block.Name)){
                     //FIX FLAGS
-                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Flags & 0b1000000000000000);
+                    //if its really this
+                    if (block.Skin!=null)block.Skin.Text = "";
                     //Copy blocks over
                     defaultMap.Blocks.Add(block);
                     //copy other stuff
@@ -83,7 +85,7 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 }
 
 void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string path = ""){
-    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx", logger:logger);
+    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx", logger:(args.Contains("-v")? logger:null));
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
