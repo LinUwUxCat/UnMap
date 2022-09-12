@@ -53,8 +53,7 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 
             if (block.Name == "StadiumCircuitToRoadMain") block.Name = "StadiumPlatformToRoadMain"; //Nadeo has added a new block in TM2 that looks the same except it's Circuit (blocky platform). I doubt this is a big change to 99% of maps (remaining are prob kacky or trial using a trick with that block for some reason)
 
-            block.Bit17 = false;                    //Remove TM2-only things
-            block.WaypointSpecialProperty = null;   //
+            block.WaypointSpecialProperty = null;   //Remove TM2-only things
 
             //just in case the user wants some additional blocks under their map
             if (block.Coord.Y == 0 && !didiask && TMNF.Blocks.Contains(block.Name) && !(blockHeight(block.Name) == 9)){
@@ -90,8 +89,7 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
         foreach(CGameCtnBlock block in map.Blocks!){
             if (version == "TM2"){
                 block.Coord = new Int3(block.Coord.X, block.Coord.Y - 8, block.Coord.Z); //tmneswc has no terrain so SURELY i will not have any problem with that
-                block.Bit17 = false;                    //Remove TM2-only things
-                block.WaypointSpecialProperty = null;   //
+                block.WaypointSpecialProperty = null;   //Remove TM2-only things
             }
 
             if (31 >= block.Coord.Y && block.Coord.Y >= 1 && TMNESWC.Blocks.Contains(block.Name)){
