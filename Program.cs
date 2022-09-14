@@ -66,10 +66,14 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 
             if ((block.Coord.Y >= minheight && block.Coord.Y <= 31) || blockHeight(block.Name) == 9){
                 if (TMNF.Blocks.Contains(block.Name)){
-                    //FIX FLAGS
-                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Flags & 0b1000000000000000);
-                    //if its really this
-                    if (block.Skin!=null)block.Skin.Text = "";
+                    //FIX FLAGS                                                                                     //Part of a bigger structure        //reference (only works for inflatables rn)
+                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
+                    //fix filerefs
+                    if (block.Skin!=null){
+                        block.Skin.PackDesc = new FileRef(2, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath, block.Skin.PackDesc.LocatorUrl);
+                        block.Skin.ParentPackDesc = new FileRef(2, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                        block.Skin.Text = "";
+                    }
                     //Copy blocks over
                     defaultMap.Blocks.Add(block);
                     //copy other stuff
