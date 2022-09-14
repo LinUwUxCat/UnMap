@@ -44,7 +44,7 @@ string getVersion(CGameCtnChallenge map){
 void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
         var didiask = false;
         var minheight = 1;
-        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx", logger: logger);
+        var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultForever.Challenge.Gbx", logger:(args.Contains("-v")? logger:null));
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -66,8 +66,14 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 
             if ((block.Coord.Y >= minheight && block.Coord.Y <= 31) || blockHeight(block.Name) == 9){
                 if (TMNF.Blocks.Contains(block.Name)){
-                    //FIX FLAGS
-                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                    //FIX FLAGS                                                                                     //Part of a bigger structure        //reference (only works for inflatables rn)
+                    block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
+                    //fix filerefs
+                    if (block.Skin!=null){
+                        block.Skin.PackDesc = new FileRef(2, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath, block.Skin.PackDesc.LocatorUrl);
+                        block.Skin.ParentPackDesc = new FileRef(2, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                        block.Skin.Text = "";
+                    }
                     //Copy blocks over
                     defaultMap.Blocks.Add(block);
                     //copy other stuff
@@ -83,7 +89,7 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
 }
 
 void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string path = ""){
-    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx", logger:logger);
+    var defaultMap = GameBox.ParseNode<CGameCtnChallenge>("DefaultESWC.Challenge.Gbx", logger:(args.Contains("-v")? logger:null));
         defaultMap.MapName = mapName;
         defaultMap.Blocks!.Clear();
         foreach(CGameCtnBlock block in map.Blocks!){
@@ -93,7 +99,13 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
             }
 
             if (31 >= block.Coord.Y && block.Coord.Y >= 1 && TMNESWC.Blocks.Contains(block.Name)){
-                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
+                //fix filerefs
+                if (block.Skin!=null){
+                    block.Skin.PackDesc = new FileRef(1, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath.Replace("Skins\\", ""), block.Skin.PackDesc.LocatorUrl);
+                    block.Skin.ParentPackDesc = new FileRef(1, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                    block.Skin.Text = "";
+                }
                 defaultMap.Blocks.Add(block);
             }
         }
