@@ -16,8 +16,8 @@ Same as above, except you need to drag a folder on UnMap.exe instead of a single
 You can find me in the [GameBox Sandbox Discord Server](https://discord.gg/9wAAJvKYyE) or in my DMs at LinuxCat#1504
 
 ### Known issues
-- Inflatables colors and signs are not carried over
-  - This is because i clear all the flags of a block except the important ones (variations and ground). However that means i also clear the Reference flag, which holds that information. 
+- Some block skins, such as signs, are not carried over
+  - For now, only the skins of Inflatables is supported, because that block has the same amount of vanilla skins in TM2, TMNF, and TMNESWC. I might add other blocks in the future, however note that signs are at the bottom of my list.
 - Some dirt hills do not appear
   - This is because of how TMNF works compared to TM2 - the dirt block's center isn't at the same position, so if there are any blocks near or in that dirt block in TM2, it will get deleted in TMNF.
 ### Notes
