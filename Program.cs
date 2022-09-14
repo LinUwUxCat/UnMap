@@ -99,7 +99,14 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
             }
 
             if (31 >= block.Coord.Y && block.Coord.Y >= 1 && TMNESWC.Blocks.Contains(block.Name)){
-                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                //block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0);
+                block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
+                //fix filerefs
+                if (block.Skin!=null){
+                    block.Skin.PackDesc = new FileRef(1, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath.Replace("Skins\\", ""), block.Skin.PackDesc.LocatorUrl);
+                    block.Skin.ParentPackDesc = new FileRef(1, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                    block.Skin.Text = "";
+                }
                 defaultMap.Blocks.Add(block);
             }
         }
