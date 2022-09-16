@@ -70,8 +70,8 @@ void unMapTMForever(CGameCtnChallenge map, string mapName, string path = ""){
                     block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
                     //fix filerefs
                     if (block.Skin!=null){
-                        block.Skin.PackDesc = new FileRef(2, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath, block.Skin.PackDesc.LocatorUrl);
-                        block.Skin.ParentPackDesc = new FileRef(2, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                        block.Skin.PackDesc = block.Skin.PackDesc! with {Version = 2};
+                        block.Skin.ParentPackDesc = block.Skin.ParentPackDesc! with {Version = 2};
                         block.Skin.Text = "";
                     }
                     //Copy blocks over
@@ -102,8 +102,8 @@ void unMapTMNESWC(CGameCtnChallenge map, string mapName, string version, string 
                 block.Flags = (block.Variant == null ? 0 : (int)block.Variant) + (block.IsGround ? 4096 : 0) + (block.Flags & 0b100000000000000) + (block.Name.Contains("Inflatable")? (block.Flags & 0b1000000000000000) : 0);
                 //fix filerefs
                 if (block.Skin!=null){
-                    block.Skin.PackDesc = new FileRef(1, block.Skin.PackDesc!.Checksum, block.Skin.PackDesc.FilePath.Replace("Skins\\", ""), block.Skin.PackDesc.LocatorUrl);
-                    block.Skin.ParentPackDesc = new FileRef(1, block.Skin.ParentPackDesc!.Checksum, block.Skin.ParentPackDesc.FilePath, block.Skin.ParentPackDesc.LocatorUrl);
+                    block.Skin.PackDesc = block.Skin.PackDesc! with {Version = 1};
+                    block.Skin.ParentPackDesc = block.Skin.ParentPackDesc! with {Version = 1};
                     block.Skin.Text = "";
                 }
                 defaultMap.Blocks.Add(block);
