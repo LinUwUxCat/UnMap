@@ -6,7 +6,7 @@ using Blocklist;
 using Sharprompt;
 using Microsoft.Extensions.Logging;
 
-GBX.NET.Lzo.SetLzo(typeof(GBX.NET.LZO.MiniLZO));
+GBX.NET.Lzo.SetLzo(typeof(GBX.NET.LZO.MiniLZO)); //needed
 
 if (args.Length < 1){
     Console.WriteLine("Please drag your TM2 map file on this executable.");
