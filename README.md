@@ -13,7 +13,7 @@ Download [the latest release](https://github.com/LinUwUxCat/UnMap/releases) or b
 Same as above, except you need to drag a folder on UnMap.exe instead of a single map file.
 
 ### Need help?
-You can find me in the [GameBox Sandbox Discord Server](https://discord.gg/9wAAJvKYyE) or in my DMs at LinuxCat#1504
+You can find me in the [GameBox Sandbox Discord Server](https://discord.gg/9wAAJvKYyE) or in my DMs at @linuxcat
 
 ### Known issues
 - Some block skins, such as signs, are not carried over
