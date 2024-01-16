@@ -1,3 +1,4 @@
+# UnMap is deprecated and no longer maintained. Please use [Downgrader](https://github.com/LinUwUxCat/Downgrader) instead.
 # UnMap
 A TM2Stadium map to TMNF challenge C# program made with GBX.NET.
 
